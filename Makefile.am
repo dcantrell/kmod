@@ -83,8 +83,10 @@ EXTRA_DIST += libkmod/README \
 	libkmod/COPYING testsuite/COPYING tools/COPYING COPYING
 
 libkmod_libkmod_la_LDFLAGS = $(AM_LDFLAGS) \
-	-version-info $(LIBKMOD_CURRENT):$(LIBKMOD_REVISION):$(LIBKMOD_AGE) \
-	-Wl,--version-script=$(top_srcdir)/libkmod/libkmod.sym
+	-version-info $(LIBKMOD_CURRENT):$(LIBKMOD_REVISION):$(LIBKMOD_AGE)
+if OS_LINUX
+libkmod_libkmod_la_LDFLAGS += -Wl,--version-script=$(top_srcdir)/libkmod/libkmod.sym
+endif
 libkmod_libkmod_la_DEPENDENCIES = \
 	shared/libshared.la \
 	${top_srcdir}/libkmod/libkmod.sym

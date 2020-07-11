@@ -946,7 +946,7 @@ KMOD_EXPORT int kmod_dump_index(struct kmod_ctx *ctx, enum kmod_index type,
 	if (ctx == NULL)
 		return -ENOSYS;
 
-	if (type < 0 || type >= _KMOD_INDEX_MODULES_SIZE)
+	if (type == 0 || type >= _KMOD_INDEX_MODULES_SIZE)
 		return -ENOENT;
 
 	if (ctx->indexes[type] != NULL) {

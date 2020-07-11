@@ -41,7 +41,9 @@ static _always_inline_ _printf_format_(2, 3) void
 #  ifdef HAVE___SECURE_GETENV
 #    define secure_getenv __secure_getenv
 #  else
-#    warning neither secure_getenv nor __secure_getenv is available
+#    ifndef __APPLE__
+#      warning neither secure_getenv nor __secure_getenv is available
+#    endif
 #    define secure_getenv getenv
 #  endif
 #endif

@@ -30,6 +30,11 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#ifdef __APPLE__
+#include <libgen.h>
+#include <sys/mount.h>
+#endif
+
 #include <shared/util.h>
 
 #include "libkmod.h"
@@ -737,9 +742,16 @@ static int conf_files_insert_sorted(struct kmod_ctx *ctx,
 	size_t namelen;
 	int cmp = -1;
 	bool is_single = false;
+#ifdef __APPLE__
+	char dname[MAXPATHLEN];
+#endif
 
 	if (name == NULL) {
+#ifdef __APPLE__
+		name = basename_r(path, dname);
+#else
 		name = basename(path);
+#endif
 		is_single = true;
 	}
 

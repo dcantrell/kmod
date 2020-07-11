@@ -17,7 +17,10 @@
  * License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __APPLE__
 #include <endian.h>
+#endif
+
 #include <inttypes.h>
 #ifdef ENABLE_OPENSSL
 #include <openssl/pkcs7.h>

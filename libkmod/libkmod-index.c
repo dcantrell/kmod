@@ -692,7 +692,7 @@ static struct index_mm_node *index_mm_read_node(struct index_mm *idx,
 		for (i = 0; i < child_count; i++)
 			children[i] = read_long_mm(&p);
 	} else {
-		first = INDEX_CHILDMAX;
+		first = (char) INDEX_CHILDMAX;
 		last = 0;
 		child_count = 0;
 	}
@@ -754,7 +754,7 @@ int index_mm_open(const struct kmod_ctx *ctx, const char *filename,
 
 	assert(pidx != NULL);
 
-	DBG(ctx, "file=%s\n", filename);
+	DBG((struct kmod_ctx *) ctx, "file=%s\n", filename);
 
 	idx = malloc(sizeof(*idx));
 	if (idx == NULL) {
@@ -763,7 +763,7 @@ int index_mm_open(const struct kmod_ctx *ctx, const char *filename,
 	}
 
 	if ((fd = open(filename, O_RDONLY|O_CLOEXEC)) < 0) {
-		DBG(ctx, "open(%s, O_RDONLY|O_CLOEXEC): %m\n", filename);
+		DBG((struct kmod_ctx *) ctx, "open(%s, O_RDONLY|O_CLOEXEC): %m\n", filename);
 		err = -errno;
 		goto fail_open;
 	}

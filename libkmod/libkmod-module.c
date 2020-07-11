@@ -765,8 +765,9 @@ KMOD_EXPORT const char *kmod_module_get_path(const struct kmod_module *mod)
 	return mod->path;
 }
 
-
+#ifndef __APPLE__
 extern long delete_module(const char *name, unsigned int flags);
+#endif
 
 /**
  * kmod_module_remove_module:
@@ -784,6 +785,9 @@ extern long delete_module(const char *name, unsigned int flags);
 KMOD_EXPORT int kmod_module_remove_module(struct kmod_module *mod,
 							unsigned int flags)
 {
+#ifdef __APPLE__
+	return -ENOTSUP;
+#else
 	int err;
 
 	if (mod == NULL)
@@ -800,9 +804,12 @@ KMOD_EXPORT int kmod_module_remove_module(struct kmod_module *mod,
 	}
 
 	return err;
+#endif
 }
 
+#ifndef __APPLE__
 extern long init_module(const void *mem, unsigned long len, const char *args);
+#endif
 
 /**
  * kmod_module_insert_module:
@@ -823,6 +830,9 @@ KMOD_EXPORT int kmod_module_insert_module(struct kmod_module *mod,
 							unsigned int flags,
 							const char *options)
 {
+#ifdef __APPLE__
+	return -ENOTSUP;
+#else
 	int err;
 	const void *mem;
 	off_t size;
@@ -892,6 +902,7 @@ init_finished:
 		INFO(mod->ctx, "Failed to insert module '%s': %m\n", path);
 	}
 	return err;
+#endif
 }
 
 static bool module_is_blacklisted(struct kmod_module *mod)

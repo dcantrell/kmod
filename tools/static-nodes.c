@@ -31,6 +31,11 @@
 #include <sys/types.h>
 #include <sys/utsname.h>
 
+#ifdef __APPLE__
+extern char *__progname;
+#define program_invocation_short_name __progname
+#endif
+
 #include <shared/util.h>
 
 #include "kmod.h"

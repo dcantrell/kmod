@@ -1,0 +1,98 @@
+Linux kmod ported to MacOS [X]/Darwin
+-------------------------------------
+
+FAQ
+~~~
+
+WHAT?  WHY?
+
+The kmod software provides userspace tools for loading and unloading
+Linux kernel modules.  This is obviously not useful on MacOS X, but
+what is potentially useful is libkmod and utilities like modinfo.  The
+purpose of this port is to provide a usable libkmod for other software
+on MacOS X.
+
+
+BUT AGAIN, WHY?
+
+This started with my effort to port rpminspect
+(https://github.com/rpminspect/rpminspect) to MacOS X.  There is no
+real reason to do this other than it is technically possible.
+rpminspect reads built RPM files and then reads the files in those
+packages to perform some build checks.  Nothing about this actually
+requires running it on Linux, so my real motivation is to prove that
+this is possible.  It also serves as a way for me to make sure that
+rpminspect is portable across systems.
+
+There might be a developer out there working on a Mac but targeting
+Linux systems and having the ability to run rpminspect locally might
+be useful.  Who knows?
+
+
+SO I CAN'T LOAD LINUX KERNEL MODULES ON MACOS X WITH THIS?
+
+Correct.  Nothing about this port changes the fact that Darwin and
+Linux are fundamentally different operating systems.
+
+
+BUT WAIT, ISN'T MACOS MACH-O AND LINUX IS ELF?
+
+Yes, but both of those things are just files and computer programs
+read files.  That's what libkmod is doing for me and ultimately what
+rpminspect is doing for me.
+
+
+
+BUILDING
+~~~~~~~~
+
+Building the software assumes you have installed the Xcode stuff and
+then Homebrew.  If you haven't done that yet, go and do that.
+
+Required Homebrew packages:
+
+    autoconf
+    automake
+    gtk-doc
+    docbook
+    docbook-xsl
+
+Get the source:
+
+    git clone https://github.com/dcantrell/kmod.git
+
+Build it:
+
+    # Currently I have not bothered with OpenSSL support (patches welcome)
+    cd kmod
+    autoreconf -f -i
+    ./configure --prefix=/usr/local --with-xz --with-zlib --without-openssl
+    make
+
+Install it:
+
+    sudo make install
+
+If someone out there wants to put this in to Homebrew so you can do
+"brew install kmod-linux" or something, that would be awesome.
+
+
+USING
+~~~~~
+
+For me, libkmod and the headers are most useful.  Those are installed
+to /usr/local.  Use them like you would on Linux, but keep in mind
+that loading and unloading modules is a no-op on MacOS.
+
+Module loading and unloading functions will return -ENOTSUP on MacOS
+because they are not supported.
+
+
+BUGS
+~~~~
+
+File issues on GitHub or send pull requests.
+
+
+-- 
+David Cantrell <david.l.cantrell@gmail.com>

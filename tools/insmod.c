@@ -27,6 +27,11 @@
 
 #include <libkmod/libkmod.h>
 
+#ifdef __APPLE__
+extern char *__progname;
+#define program_invocation_short_name __progname
+#endif
+
 #include "kmod.h"
 
 static const char cmdopts_s[] = "psfVh";

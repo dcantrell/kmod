@@ -29,7 +29,11 @@ static inline int finit_module(int fd, const char *uargs, int flags)
 		return -1;
 	}
 
+#ifdef __APPLE__
+	return 0;
+#else
 	return syscall(__NR_finit_module, fd, uargs, flags);
+#endif
 }
 #endif
 
@@ -45,9 +49,11 @@ static inline int finit_module(int fd, const char *uargs, int flags)
 #endif
 
 #if !HAVE_DECL_BE32TOH
+#ifndef __APPLE__
 #include <endian.h>
 #include <byteswap.h>
-#if __BYTE_ORDER == __LITTLE_ENDIAN
+#endif
+#if __BYTE_ORDER__ == __LITTLE_ENDIAN__
 #define be32toh(x) bswap_32 (x)
 #else
 #define be32toh(x) (x)

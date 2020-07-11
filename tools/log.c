@@ -22,6 +22,11 @@
 #include <stdlib.h>
 #include <syslog.h>
 
+#ifdef __APPLE__
+extern char *__progname;
+#define program_invocation_short_name __progname
+#endif
+
 #include <libkmod/libkmod.h>
 
 #include "kmod.h"

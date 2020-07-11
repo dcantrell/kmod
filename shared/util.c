@@ -29,6 +29,14 @@
 #include <string.h>
 #include <unistd.h>
 
+#ifdef __APPLE__
+#include <libgen.h>
+#include <sys/mount.h>
+
+extern char *__progname;
+#define program_invocation_short_name __progname
+#endif
+
 #include <shared/missing.h>
 #include <shared/util.h>
 
@@ -170,8 +178,15 @@ char *modname_normalize(const char *modname, char buf[static PATH_MAX], size_t *
 char *path_to_modname(const char *path, char buf[static PATH_MAX], size_t *len)
 {
 	char *modname;
+#ifdef __APPLE__
+	char dname[MAXPATHLEN];
+#endif
 
+#ifdef __APPLE__
+	modname = basename_r(path, dname);
+#else
 	modname = basename(path);
+#endif
 	if (modname == NULL || modname[0] == '\0')
 		return NULL;
 
@@ -360,16 +375,25 @@ bool path_is_absolute(const char *p)
 
 char *path_make_absolute_cwd(const char *p)
 {
+#ifdef __APPLE__
+	char cwd[MAXPATHLEN + 1];
+#else
 	_cleanup_free_ char *cwd = NULL;
+#endif
 	size_t plen, cwdlen;
 	char *r;
 
 	if (path_is_absolute(p))
 		return strdup(p);
 
+#ifdef __APPLE__
+	if (getcwd(cwd, MAXPATHLEN) == NULL)
+		return NULL;
+#else
 	cwd = get_current_dir_name();
 	if (!cwd)
 		return NULL;
+#endif
 
 	plen = strlen(p);
 	cwdlen = strlen(cwd);
@@ -379,7 +403,11 @@ char *path_make_absolute_cwd(const char *p)
 	if (r == NULL)
 		return NULL;
 
+#ifdef __APPLE__
+	memset(cwd, 0, sizeof(cwd));
+#else
 	cwd = NULL;
+#endif
 	r[cwdlen] = '/';
 	memcpy(&r[cwdlen + 1], p, plen + 1);
 

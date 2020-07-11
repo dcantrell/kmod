@@ -73,6 +73,7 @@ AC_COMPILE_IFELSE(
 	 AC_MSG_RESULT([yes])],
 	[AC_MSG_RESULT([no])])
 
+AM_CONDITIONAL(OS_LINUX, test $(uname) -eq Linux)
 
 #####################################################################
 # --with-

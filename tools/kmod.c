@@ -27,6 +27,13 @@
 
 #include <libkmod/libkmod.h>
 
+#ifdef __APPLE__
+#include <libgen.h>
+
+extern char *__progname;
+#define program_invocation_short_name __progname
+#endif
+
 #include "kmod.h"
 
 static const char options_s[] = "+hV";

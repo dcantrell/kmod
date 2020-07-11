@@ -32,6 +32,14 @@
 #include <sys/time.h>
 #include <sys/utsname.h>
 
+#ifdef __APPLE__
+#include <libgen.h>
+#include <sys/param.h>
+
+extern char *__progname;
+#define program_invocation_short_name __progname
+#endif
+
 #include <shared/array.h>
 #include <shared/hash.h>
 #include <shared/macro.h>
@@ -505,7 +513,11 @@ static int cfg_search_add(struct cfg *cfg, const char *path)
 		memcpy(s->path, path, len);
 	}
 
+#ifdef __APPLE__
+	DBG("search add: %s, search type=%u\n", path, type);
+#else
 	DBG("search add: %s, search type=%hhu\n", path, type);
+#endif
 
 	s->next = cfg->searches;
 	cfg->searches = s;
@@ -716,12 +728,19 @@ static int cfg_files_insert_sorted(struct cfg_file ***p_files, size_t *p_n_files
 	struct cfg_file **files, *f;
 	size_t i, n_files, namelen, dirlen;
 	void *tmp;
+#ifdef __APPLE__
+	char dname[MAXPATHLEN];
+#endif
 
 	dirlen = strlen(dir);
 	if (name != NULL)
 		namelen = strlen(name);
 	else {
+#ifdef __APPLE__
+		name = basename_r(dir, dname);
+#else
 		name = basename(dir);
+#endif
 		namelen = strlen(name);
 		dirlen -= namelen + 1;
 	}
@@ -2513,8 +2532,13 @@ static int depmod_output(struct depmod *depmod, FILE *out)
 			int mode = 0644;
 			int fd;
 
+#ifdef __APPLE__
+			snprintf(tmp, sizeof(tmp), "%s.%i.%i.%li", itr->name, getpid(),
+					tv.tv_usec, tv.tv_sec);
+#else
 			snprintf(tmp, sizeof(tmp), "%s.%i.%li.%li", itr->name, getpid(),
 					tv.tv_usec, tv.tv_sec);
+#endif
 			fd = openat(dfd, tmp, flags, mode);
 			if (fd < 0) {
 				ERR("openat(%s, %s, %o, %o): %m\n",
