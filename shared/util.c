@@ -375,25 +375,21 @@ bool path_is_absolute(const char *p)
 
 char *path_make_absolute_cwd(const char *p)
 {
-#ifdef __APPLE__
-	char cwd[MAXPATHLEN + 1];
-#else
 	_cleanup_free_ char *cwd = NULL;
-#endif
 	size_t plen, cwdlen;
-	char *r;
+	char *r = NULL;
 
 	if (path_is_absolute(p))
 		return strdup(p);
 
 #ifdef __APPLE__
-	if (getcwd(cwd, MAXPATHLEN) == NULL)
-		return NULL;
+	cwd = getcwd(cwd, MAXPATHLEN);
 #else
 	cwd = get_current_dir_name();
+#endif
+
 	if (!cwd)
 		return NULL;
-#endif
 
 	plen = strlen(p);
 	cwdlen = strlen(cwd);
@@ -403,11 +399,7 @@ char *path_make_absolute_cwd(const char *p)
 	if (r == NULL)
 		return NULL;
 
-#ifdef __APPLE__
-	memset(cwd, 0, sizeof(cwd));
-#else
 	cwd = NULL;
-#endif
 	r[cwdlen] = '/';
 	memcpy(&r[cwdlen + 1], p, plen + 1);
 
