@@ -57,6 +57,7 @@ Required Homebrew packages:
     gtk-doc
     docbook
     docbook-xsl
+    xz
 
 Get the source:
 

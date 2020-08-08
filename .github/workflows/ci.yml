@@ -59,7 +59,7 @@ jobs:
             # test suite dependencies
             - name: Install Build Dependencies
               run: |
-                  brew install autoconf automake gtk-doc docbook docbook-xsl
+                  brew install autoconf automake gtk-doc docbook docbook-xsl xz
 
             # Compile the software
             - name: Build
