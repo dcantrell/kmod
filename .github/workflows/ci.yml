@@ -21,8 +21,8 @@ jobs:
             # test suite dependencies
             - name: Install Build Dependencies
               run: |
-                  apt-get update
-                  apt-get -y install make gcc autoconf
+                  sudo apt-get update
+                  sudo apt-get -y install make gcc autoconf
 
             # Compile the software
             - name: Build
