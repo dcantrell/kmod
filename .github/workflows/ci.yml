@@ -22,8 +22,8 @@ jobs:
             - name: Install Build Dependencies
               run: |
                   sudo apt-get update
-                  sudo apt-get -y install make gcc autoconf automake gettext gtk-doc-tools python3-dev python3-pip
-                  sudo pip3 install cython
+                  sudo apt-get -y install make gcc autoconf automake gettext gtk-doc-tools python3-dev python3-pip lcov
+                  sudo pip3 install cython gcovr
 
             # Compile the software
             - name: Build
