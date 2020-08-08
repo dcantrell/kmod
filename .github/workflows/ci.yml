@@ -44,3 +44,27 @@ jobs:
               run: |
                   make coverage
                   curl -s https://codecov.io/bash | bash
+
+    macos:
+        # This job runs directly on the macOS host provided by GitHub Actions
+        runs-on: macos-latest
+
+        # All of these steps run from within the main source
+        # directory, so think of that as your $PWD
+        steps:
+            # This means clone the git repo
+            - uses: actions/checkout@v2
+
+            # Within the container, install the build dependencies and
+            # test suite dependencies
+            - name: Install Build Dependencies
+              run: |
+                  brew install autoconf automake gtk-doc docbook docbook-xsl
+
+            # Compile the software
+            - name: Build
+              run: |
+                  gtkdocize --docdir libkmod/docs || touch libkmod/docs/gtk-doc.make
+                  autoreconf -f -i
+                  ./configure --enable-debug --disable-python --with-xz --with-zlib --without-openssl
+                  make V=1
