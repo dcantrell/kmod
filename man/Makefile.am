@@ -16,10 +16,13 @@ endif
 EXTRA_DIST = $(MAN5:%.5=%.xml) $(MAN8:%.8=%.xml)
 CLEANFILES = $(dist_man_MANS)
 
+XSLT_OPTS = --stringparam man.output.quietly 1 \
+            --param funcsynopsis.style "'ansi'" \
+            http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+
+if OS_LINUX
+XSLT_OPTS += --nonet
+endif
+
 %.5 %.8: %.xml
-	$(AM_V_XSLT)$(XSLT) \
-		-o $@ \
-		--nonet \
-		--stringparam man.output.quietly 1 \
-		--param funcsynopsis.style "'ansi'" \
-		http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+	$(AM_V_XSLT)$(XSLT) $(XSLT_OPTS)
