@@ -27,8 +27,9 @@ jobs:
             # Compile the software
             - name: Build
               run: |
+                  gtkdocize --docdir libkmod/docs || touch libkmod/docs/gtk-doc.make
                   autoreconf -f -i
-                  ./configure --with-xz --with-zlib --with-openssl
+                  ./configure --enable-debug --enable-python --with-xz --with-zlib --with-openssl
                   make
 
             # Run the test suite
