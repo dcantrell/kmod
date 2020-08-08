@@ -37,8 +37,7 @@ jobs:
             # Run the test suite
             - name: Test
               run: |
-                  make V=1 check
-                  cat testsuite/test-suite.log
+                  make V=1 check || cat testsuite/test-suite.log
 
             # Generate code coverage reports
             - name: Coverage
