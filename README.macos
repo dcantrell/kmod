@@ -57,6 +57,7 @@ Required Homebrew packages:
     gtk-doc
     docbook
     docbook-xsl
+    pkg-config
     xz
 
 Get the source:
@@ -68,8 +69,8 @@ Build it:
     # Currently I have not bothered with OpenSSL support (patches welcome)
     cd kmod
     autoreconf -f -i
-    ./configure --prefix=/usr/local --with-xz --with-zlib --without-openssl
-    make
+    env PKG_CONFIG_PATH=/usr/local/opt/xz/lib/pkgconfig ./configure --prefix=/usr/local --with-xz --with-zlib --without-openssl
+    env XML_CATALOG_FILES="/usr/local/opt/docbook-xsl/docbook-xsl/catalog.xml /usr/local/opt/docbook-xsl/docbook-xsl-ns/catalog.xml" make
 
 Install it:
 
