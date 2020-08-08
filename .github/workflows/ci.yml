@@ -22,15 +22,16 @@ jobs:
             - name: Install Build Dependencies
               run: |
                   sudo apt-get update
-                  sudo apt-get -y install make gcc autoconf automake gettext gtk-doc-tools
+                  sudo apt-get -y install make gcc autoconf automake gettext gtk-doc-tools python3-dev python3-pip
+                  sudo pip3 install cython
 
             # Compile the software
             - name: Build
               run: |
                   gtkdocize --docdir libkmod/docs || touch libkmod/docs/gtk-doc.make
                   autoreconf -f -i
-                  ./configure --enable-debug --enable-python --with-xz --with-zlib --with-openssl
-                  make
+                  ./configure --enable-debug --enable-python --with-xz --with-zlib --with-openssl --enable-coverage
+                  make V=1
 
             # Run the test suite
             - name: Test
