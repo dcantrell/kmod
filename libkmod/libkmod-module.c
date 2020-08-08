@@ -229,12 +229,16 @@ void kmod_module_set_required(struct kmod_module *mod, bool required)
 
 bool kmod_module_is_builtin(struct kmod_module *mod)
 {
+#ifdef __APPLE__
+	return 0;
+#else
 	if (mod->builtin == KMOD_MODULE_BUILTIN_UNKNOWN) {
 		kmod_module_set_builtin(mod,
 					kmod_lookup_alias_is_builtin(mod->ctx, mod->name));
 	}
 
 	return mod->builtin == KMOD_MODULE_BUILTIN_YES;
+#endif
 }
 /*
  * Memory layout with alias:

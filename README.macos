@@ -1,5 +1,5 @@
-Linux kmod ported to MacOS [X]/Darwin
--------------------------------------
+Linux kmod ported to macOS/MacOS X/Darwin
+-----------------------------------------
 
 FAQ
 ~~~
@@ -7,32 +7,33 @@ FAQ
 WHAT?  WHY?
 
 The kmod software provides userspace tools for loading and unloading
-Linux kernel modules.  This is obviously not useful on MacOS X, but
-what is potentially useful is libkmod and utilities like modinfo.  The
+Linux kernel modules.  This is obviously not useful on macOS, but what
+is potentially useful is libkmod and utilities like modinfo.  The
 purpose of this port is to provide a usable libkmod for other software
-on MacOS X.
+on macOS.
 
 
 BUT AGAIN, WHY?
 
 This started with my effort to port rpminspect
-(https://github.com/rpminspect/rpminspect) to MacOS X.  There is no
-real reason to do this other than it is technically possible.
-rpminspect reads built RPM files and then reads the files in those
-packages to perform some build checks.  Nothing about this actually
-requires running it on Linux, so my real motivation is to prove that
-this is possible.  It also serves as a way for me to make sure that
-rpminspect is portable across systems.
+(https://github.com/rpminspect/rpminspect) to macOS.  There is no real
+reason to do this other than it is technically possible.  rpminspect
+reads built RPM files and then reads the files in those packages to
+perform some build checks.  Nothing about this actually requires
+running it on Linux, so my real motivation is to prove that this is
+possible.  It also serves as a way for me to make sure that rpminspect
+is portable across systems.
 
 There might be a developer out there working on a Mac but targeting
 Linux systems and having the ability to run rpminspect locally might
-be useful.  Who knows?
+be useful.  Or just gathering info on built kernel modules that happen
+to exist locally on the Mac they are using.  Who knows?
 
 
-SO I CAN'T LOAD LINUX KERNEL MODULES ON MACOS X WITH THIS?
+CAN I LOAD LINUX KERNEL MODULES ON MACOS WITH THIS?
 
-Correct.  Nothing about this port changes the fact that Darwin and
-Linux are fundamentally different operating systems.
+No.  Nothing about this port changes the fact that Darwin and Linux
+are fundamentally different operating systems.
 
 
 BUT WAIT, ISN'T MACOS MACH-O AND LINUX IS ELF?
@@ -84,7 +85,7 @@ For me, libkmod and the headers are most useful.  Those are installed
 to /usr/local.  Use them like you would on Linux, but keep in mind
 that loading and unloading modules is a no-op on MacOS.
 
-Module loading and unloading functions will return -ENOTSUP on MacOS
+Module loading and unloading functions will return -ENOTSUP on macOS
 because they are not supported.
 
 

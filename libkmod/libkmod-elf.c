@@ -464,11 +464,13 @@ struct kmod_elf *kmod_elf_new(const void *memory, off_t size)
 	       elf->header.section.entry_size,
 	       elf->header.strings.section);
 
+#ifndef __APPLE__
 	if (elf->header.section.entry_size != shdr_size) {
 		ELFDBG(elf, "unexpected section entry size: %"PRIu16", expected %"PRIu16"\n",
 		       elf->header.section.entry_size, shdr_size);
 		goto invalid;
 	}
+#endif
 	shdrs_size = shdr_size * elf->header.section.count;
 	if (addu64_overflow(shdrs_size, elf->header.section.offset, &min_size)
 	    || min_size > elf->size) {
