@@ -66,5 +66,5 @@ jobs:
               run: |
                   gtkdocize --docdir libkmod/docs || touch libkmod/docs/gtk-doc.make
                   autoreconf -f -i
-                  ./configure --enable-debug --disable-python --with-xz --with-zlib --without-openssl
+                  env PKG_CONFIG_PATH=/usr/local/opt/xz/lib/pkgconfig ./configure --enable-debug --disable-python --with-xz --with-zlib --without-openssl
                   make V=1
